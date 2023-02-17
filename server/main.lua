@@ -12,26 +12,21 @@ RegisterNetEvent('g-drugselling:server:sell', function(sellLocation)
                 local bundlesToSell = math.floor(hasItem.amount / v.sell_quantity)
                 local quantityToSell = bundlesToSell * v.sell_quantity
                 if player.Functions.RemoveItem(k, quantityToSell) then
-                    for k2, v2 in pairs(v.rewards) do
-                        local isMoneyType = false
-                        for k3, v3 in pairs(QBConfig.Money.MoneyTypes) do
-                            if tostring(k3) == k2 then
-                                isMoneyType = true
-                            end
+                    for k2, v2 in pairs(v.money_rewards) do
+                        local amountOwed = v2 * bundlesToSell
+                        if not player.Functions.AddMoney(k2, amountOwed) then
+                            player.Functions.AddItem(k, quantityToSell)
+                            return
                         end
-                        if isMoneyType then
-                            if not player.Functions.AddMoney(k2, v2) then
-                                player.Functions.AddItem(k, quantityToSell)
-                                return
-                            end
-                        else
-                            if not player.Functions.AddItem(k2, v2) then
-                                player.Functions.AddItem(k, quantityToSell)
-                                return
-                            end
-                            if sellLocation.itemNotificationsEnabled then
-                                TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[k2], 'add', v2)
-                            end
+                    end
+                    for k2, v2 in pairs(v.item_rewards) do
+                        local amountOwed = v2 * bundlesToSell
+                        if not player.Functions.AddItem(k2, amountOwed) then
+                            player.Functions.AddItem(k, quantityToSell)
+                            return
+                        end
+                        if sellLocation.itemNotificationsEnabled then
+                            TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[k2], 'add', amountOwed)
                         end
                     end
                     local notifyPoliceRoll = math.random(1, 100)
