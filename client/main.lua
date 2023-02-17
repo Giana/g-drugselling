@@ -1,5 +1,22 @@
 -- Threads --
 
+-- Blip setup
+Citizen.CreateThread(function()
+    for k, v in pairs(Config.SellLocations) do
+        if v.active and v.blip.enabled then
+            local locationBlip = AddBlipForCoord(v.coords.x, v.coords.y, v.coords.z)
+            SetBlipColour(locationBlip, v.blip.color)
+            SetBlipSprite(locationBlip, v.blip.sprite)
+            SetBlipScale(locationBlip, v.blip.scale)
+            SetBlipDisplay(locationBlip, v.blip.display)
+            SetBlipAsShortRange(locationBlip, v.blip.shortRange)
+            BeginTextCommandSetBlipName('STRING')
+            AddTextComponentSubstringPlayerName(v.blip.label)
+            EndTextCommandSetBlipName(locationBlip)
+        end
+    end
+end)
+
 -- Walk up & drive up
 Citizen.CreateThread(function()
     while true do
