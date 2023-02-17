@@ -1,3 +1,26 @@
+-- Events --
+
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+    TriggerEvent('g-drugselling:client:spawnNpcs')
+end)
+
+RegisterNetEvent('g-drugselling:client:spawnNpcs', function()
+    for k, v in pairs(Config.SellLocations) do
+        if v.npc.enabled then
+            local npc = v.npc
+            RequestModel(GetHashKey(npc.ped))
+            while not HasModelLoaded(GetHashKey(npc.ped)) do
+                Citizen.Wait(100)
+            end
+            local sellPed = CreatePed(7, GetHashKey(npc.Ped), v.coords.x, v.coords.y, v.coords.z - 0.97, npc.heading, 0, true, true)
+            FreezeEntityPosition(sellPed, true)
+            SetBlockingOfNonTemporaryEvents(sellPed, true)
+            TaskStartScenarioInPlace(sellPed, npc.scenario, 0, false)
+            SetEntityInvincible(sellPed, true)
+        end
+    end
+end)
+
 -- Threads --
 
 -- Blip setup
