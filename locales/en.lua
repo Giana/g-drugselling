@@ -1,18 +1,9 @@
 local Translations = {
     error = {
-
+        not_enough = 'You do not have enough of: %{itemLabel}'
     },
-    success = {
-
-    },
-    menu = {
-
-    },
-    button = {
-
-    },
-    other = {
-
+    info = {
+        police_alert = 'Drug sale in progress'
     }
 }
 
