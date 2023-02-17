@@ -36,7 +36,7 @@ RegisterNetEvent('g-drugselling:server:sell', function(sellLocation)
                     end
                     local notifyPoliceRoll = math.random(1, 100)
                     if notifyPoliceRoll <= sellLocation.policeAlertChance then
-                        TriggerServerEvent('police:server:policeAlert', Lang:t('info.police_alert'))
+                        TriggerEvent('police:server:policeAlert', Lang:t('info.police_alert'))
                     end
                 end
             else
