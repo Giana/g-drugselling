@@ -5,6 +5,8 @@ Config = {}
     - active: If the sell location is active
         - Set to false to disable selling at this location (blip and marker, if enabled, will not appear on map or to players at all)
     - policeAlertChance: % chance police are alerted of selling
+    - notificationsEnabled: If notifications regarding selling are enabled
+    - itemNotificationsEnabled: If notifications regarding items being added/removed to/from inventory are enabled
     - type: How location is approached by player to sell
         - Options:
             - 'walkup'
@@ -43,14 +45,16 @@ Config = {}
         - scenario: NPC ped scenario
     - sellable_items:
         - 'itemName': Name of item
-            - quantity: Amount to sell
-            - reward_type: Reward type
-            - reward_amount: Amount of reward
+            - sell_quantity: Amount to sell in increments of
+            - rewards:
+                - 'rewardItemName' (name of money type or reward item) = rewardAmount (# amount of money type or reward item)
 ]]
 Config.SellLocations = {
     [1] = {
         active = true,
         policeAlertChance = 15,
+        notificationsEnabled = false,
+        itemNotificationsEnabled = false,
         type = 'walkup',
         coords = vector3(292.65, -1072.83, 28.41),
         blip = {
@@ -83,40 +87,48 @@ Config.SellLocations = {
         },
         sellable_items = {
             ['weed_white-widow'] = {
-                minimum_quantity = 5,
-                reward_type = 'cash',
-                reward_amount = math.random(75, 120)
+                sell_quantity = 5,
+                rewards = {
+                    ['cash'] = math.random(75, 120)
+                }
             },
             ['weed_skunk'] = {
-                minimum_quantity = 5,
-                reward_type = 'cash',
-                reward_amount = math.random(75, 120)
+                sell_quantity = 5,
+                rewards = {
+                    ['cash'] = math.random(75, 120)
+                }
             },
             ['weed_purple-haze'] = {
-                minimum_quantity = 5,
-                reward_type = 'cash',
-                reward_amount = math.random(75, 120)
+                sell_quantity = 5,
+                rewards = {
+                    ['cash'] = math.random(75, 120)
+                }
             },
             ['weed_og-kush'] = {
-                minimum_quantity = 5,
-                reward_type = 'cash',
-                reward_amount = math.random(75, 120)
+                sell_quantity = 5,
+                rewards = {
+                    ['cash'] = math.random(75, 120)
+                }
             },
             ['weed_amnesia'] = {
-                minimum_quantity = 5,
-                reward_type = 'cash',
-                reward_amount = math.random(75, 120)
+                sell_quantity = 5,
+                rewards = {
+                    ['cash'] = math.random(75, 120)
+                }
             },
             ['weed_brick'] = {
-                minimum_quantity = 10,
-                reward_type = 'cash',
-                reward_amount = math.random(2000, 3000)
+                sell_quantity = 10,
+                rewards = {
+                    ['cash'] = math.random(2000, 3000)
+                }
             }
         }
     },
     [2] = {
         active = true,
         policeAlertChance = 15,
+        notificationsEnabled = false,
+        itemNotificationsEnabled = false,
         type = 'walkup',
         coords = vector3(292.65, -1072.83, 28.41),
         blip = {
@@ -149,15 +161,18 @@ Config.SellLocations = {
         },
         sellable_items = {
             ['meth'] = {
-                minimum_quantity = 5,
-                reward_type = 'cash',
-                reward_amount = math.random(75, 120)
+                sell_quantity = 5,
+                rewards = {
+                    ['cash'] = math.random(75, 120)
+                }
             }
         }
     },
     [3] = {
         active = true,
         policeAlertChance = 15,
+        notificationsEnabled = false,
+        itemNotificationsEnabled = false,
         type = 'walkup',
         coords = vector3(292.65, -1072.83, 28.41),
         blip = {
@@ -190,15 +205,18 @@ Config.SellLocations = {
         },
         sellable_items = {
             ['crack_baggy'] = {
-                minimum_quantity = 5,
-                reward_type = 'cash',
-                reward_amount = math.random(90, 170)
+                sell_quantity = 5,
+                rewards = {
+                    ['cash'] = math.random(90, 170)
+                }
             }
         }
     },
     [4] = {
         active = true,
         policeAlertChance = 15,
+        notificationsEnabled = false,
+        itemNotificationsEnabled = false,
         type = 'walkup',
         coords = vector3(292.65, -1072.83, 28.41),
         blip = {
@@ -231,14 +249,16 @@ Config.SellLocations = {
         },
         sellable_items = {
             ['cokebaggy'] = {
-                minimum_quantity = 5,
-                reward_type = 'cash',
-                reward_amount = math.random(90, 185)
+                sell_quantity = 5,
+                rewards = {
+                    ['cash'] = math.random(90, 185)
+                }
             },
             ['coke_brick'] = {
-                minimum_quantity = 10,
-                reward_type = 'cash',
-                reward_amount = math.random(8500, 10000)
+                sell_quantity = 10,
+                rewards = {
+                    ['cash'] = math.random(8500, 10000)
+                }
             }
         }
     }
