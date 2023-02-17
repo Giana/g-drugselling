@@ -6,6 +6,8 @@ author 'Giana - github.com/Giana'
 description 'g-drugselling'
 
 shared_scripts {
+    '@qb-core/shared/locale.lua',
+    'locales/en.lua',
     'config.lua'
 }
 
