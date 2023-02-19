@@ -242,7 +242,7 @@ Config.SellLocations = {
             faceCamera = false
         },
         npc = {
-            enabled = true,
+            enabled = false,
             ped = 's_m_y_xmech_02_mp',
             heading = 97.09,
             scenario = 'WORLD_HUMAN_AA_SMOKE',
