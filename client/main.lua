@@ -1,3 +1,75 @@
+local QBCore = exports['qb-core']:GetCoreObject()
+
+local IsSelling = false
+local Peds = {}
+
+-- Functions --
+
+function createPed(hash, ...)
+    RequestModel(hash)
+    while not HasModelLoaded(hash) do
+        Citizen.Wait(100)
+    end
+    local ped = CreatePed(26, hash, ...)
+    SetModelAsNoLongerNeeded(hash)
+    return ped
+end
+
+function createClientNpc(index)
+    if (Peds[index]) then
+        deleteClientNpc(index)
+    end
+    Peds[index] = {}
+    local location = Config.SellLocations[index]
+    local ped = createPed(location.npc.ped, location.coords.x, location.coords.y, location.coords.z - 0.97, location.npc.heading, false, true)
+    FreezeEntityPosition(ped, true)
+    SetEntityHeading(ped, location.npc.heading)
+    SetEntityInvincible(ped, true)
+    SetBlockingOfNonTemporaryEvents(ped, true)
+    Peds[index].npc = ped
+end
+
+function deleteClientNpc(index)
+    if (Peds[index]) then
+        DeleteEntity(Peds[index].npc)
+        Peds[index] = nil
+    end
+end
+
+function attemptSell(sellLocationIndex)
+    local notificationsEnabled = Config.SellLocations[sellLocationIndex].notificationsEnabled
+    if IsSelling then
+        return
+    end
+    IsSelling = true
+    QBCore.Functions.TriggerCallback('g-drugselling:server:getCopCount', function(copCount)
+        if copCount >= Config.SellLocations[sellLocationIndex].policeRequired then
+            QBCore.Functions.TriggerCallback('g-drugselling:server:getSellableItems', function(sellableItems)
+                if sellableItems and #sellableItems > 0 then
+                    if notificationsEnabled then
+                        QBCore.Functions.Notify(Lang:t('info.selling'))
+                    end
+                    TriggerServerEvent('g-drugselling:server:sellItems', sellLocationIndex, sellableItems, Config.SellLocations[sellLocationIndex].money_reward_type)
+                    Citizen.Wait(10000)
+                    IsSelling = false
+                else
+                    if notificationsEnabled then
+                        QBCore.Functions.Notify(Lang:t('error.not_enough'))
+                    end
+                    Citizen.Wait(10000)
+                    IsSelling = false
+                end
+            end, sellLocationIndex)
+        else
+            if notificationsEnabled then
+                QBCore.Functions.Notify(Lang:t('error.cannot_sell'))
+            end
+            Citizen.Wait(20000)
+            IsSelling = false
+        end
+    end)
+end
+
 -- Events --
 
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
@@ -37,6 +109,34 @@ Citizen.CreateThread(function()
             AddTextComponentSubstringPlayerName(v.blip.label)
             EndTextCommandSetBlipName(locationBlip)
         end
+    end
+end)
+
+-- NPC ped setup
+Citizen.CreateThread(function()
+    while true do
+        if LocalPlayer.state.isLoggedIn then
+            local ped = PlayerPedId()
+            local pos = GetEntityCoords(ped)
+            local inRange = false
+            for k, v in pairs(Config.SellLocations) do
+                if v.active and v.npc.enabled then
+                    local dist = #(pos - v.coords)
+                    if dist < Config.NpcRenderDistance then
+                        if not Peds[k] then
+                            createClientNpc(k)
+                        end
+                        inRange = true
+                    elseif Peds[k] then
+                        deleteClientNpc(k)
+                    end
+                end
+            end
+            if not inRange then
+                Citizen.Wait(2000)
+            end
+        end
+        Citizen.Wait(3)
     end
 end)
 
