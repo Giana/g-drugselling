@@ -54,6 +54,11 @@ Config.NpcRenderDistance = 60   -- Render distance for NPCs (if NPC enabled for 
         - 'itemName': Name of item
             - sell_quantity: Amount to sell in increments of
             - money_amount: Amount of money to reward per sell_quantity
+            - item_rewards:
+                - ['itemName'] (name of item) = itemAmount (amount of item to reward per sell_quantity)
+                    - Example:
+                        - ['sandwich'] = 2,
+                          ['joint'] = math.random(1, 2)
 ]]
 Config.SellLocations = {
     [1] = {
@@ -97,27 +102,45 @@ Config.SellLocations = {
         sellable_items = {
             ['weed_white-widow'] = {
                 sell_quantity = 5,
-                money_amount = math.random(75, 120)
+                money_amount = math.random(75, 120),
+                item_rewards = {
+                    ['joint'] = math.random(1, 2)
+                }
             },
             ['weed_skunk'] = {
                 sell_quantity = 5,
-                money_amount = math.random(75, 120)
+                money_amount = math.random(75, 120),
+                item_rewards = {
+                    ['joint'] = math.random(1, 2)
+                }
             },
             ['weed_purple-haze'] = {
                 sell_quantity = 5,
-                money_amount = math.random(75, 120)
+                money_amount = math.random(75, 120),
+                item_rewards = {
+                    ['joint'] = math.random(1, 2)
+                }
             },
             ['weed_og-kush'] = {
                 sell_quantity = 5,
-                money_amount = math.random(75, 120)
+                money_amount = math.random(75, 120),
+                item_rewards = {
+                    ['joint'] = math.random(1, 2)
+                }
             },
             ['weed_amnesia'] = {
                 sell_quantity = 5,
-                money_amount = math.random(75, 120)
+                money_amount = math.random(75, 120),
+                item_rewards = {
+                    ['joint'] = math.random(1, 2),
+                }
             },
             ['weed_brick'] = {
                 sell_quantity = 10,
-                money_amount = math.random(2000, 3000)
+                money_amount = math.random(2000, 3000),
+                item_rewards = {
+                    ['joint'] = math.random(1, 8),
+                }
             }
         }
     },
@@ -162,7 +185,10 @@ Config.SellLocations = {
         sellable_items = {
             ['meth'] = {
                 sell_quantity = 5,
-                money_amount = math.random(75, 120)
+                money_amount = math.random(75, 120),
+                item_rewards = {
+
+                }
             }
         }
     },
@@ -207,7 +233,10 @@ Config.SellLocations = {
         sellable_items = {
             ['crack_baggy'] = {
                 sell_quantity = 5,
-                money_amount = math.random(90, 170)
+                money_amount = math.random(90, 170),
+                item_rewards = {
+
+                }
             }
         }
     },
@@ -252,11 +281,17 @@ Config.SellLocations = {
         sellable_items = {
             ['cokebaggy'] = {
                 sell_quantity = 5,
-                money_amount = math.random(90, 185)
+                money_amount = math.random(90, 185),
+                item_rewards = {
+
+                }
             },
             ['coke_brick'] = {
                 sell_quantity = 10,
-                money_amount = math.random(8500, 10000)
+                money_amount = math.random(8500, 10000),
+                item_rewards = {
+
+                }
             }
         }
     }

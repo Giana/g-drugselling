@@ -16,11 +16,23 @@ function rollForNotifyingPolice(source, policeAlertChance)
     end
 end
 
+function rewardItems(source, items, itemNotificationsEnabled)
+    local src = source
+    local player = QBCore.Functions.GetPlayer(src)
+    for k, v in pairs(items) do
+        player.Functions.AddItem(v.name, v.amount)
+        if itemNotificationsEnabled then
+            TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[v.name], 'add', v.amount)
+        end
+    end
+end
+
 -- Events --
 
 RegisterNetEvent('g-drugselling:server:sellItems', function(sellLocationIndex, items, moneyType)
     local src = source
     local player = QBCore.Functions.GetPlayer(src)
+    local itemNotificationsEnabled = Config.SellLocations[sellLocationIndex].itemNotificationsEnabled
     if CachedPolice[src] == nil then
         DropPlayer(src, "Exploiting")
         return
@@ -29,25 +41,32 @@ RegisterNetEvent('g-drugselling:server:sellItems', function(sellLocationIndex, i
         for k, v in pairs(items) do
             if player.Functions.RemoveItem(v.name, v.sellableQuantity) then
                 Citizen.Wait(900)
-                if not player.Functions.AddMoney(moneyType, v.price) then
+                if v.price > 0 and not player.Functions.AddMoney(moneyType, v.price) then
                     player.Functions.AddItem(v.name, v.sellableQuantity)
-                    return
+                    goto skipItem
                 end
-                if Config.SellLocations[sellLocationIndex].itemNotificationsEnabled then
+                if itemNotificationsEnabled then
                     TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[v.name], 'remove', v.sellableQuantity)
                 end
+                if v.rewardItems and #v.rewardItems > 0 then
+                    rewardItems(src, v.rewardItems, itemNotificationsEnabled)
+                end
             end
+            :: skipItem ::
         end
         rollForNotifyingPolice(src, Config.SellLocations[sellLocationIndex].policeAlertChance)
     else
         if player.Functions.RemoveItem(items[1].name, items[1].sellableQuantity) then
-            Citizen.Wait(800)
-            if not player.Functions.AddMoney(moneyType, items[1].price) then
+            Citizen.Wait(900)
+            if items[1].price > 0 and not player.Functions.AddMoney(moneyType, items[1].price) then
                 player.Functions.AddItem(items[1].name, items[1].sellableQuantity)
                 return
             end
-            if Config.SellLocations[sellLocationIndex].itemNotificationsEnabled then
+            if itemNotificationsEnabled then
                 TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[items[1].name], 'remove', items[1].sellableQuantity)
+            end
+            if items[1].rewardItems and #items[1].rewardItems > 0 then
+                rewardItems(src, items[1].rewardItems, itemNotificationsEnabled)
             end
         end
         rollForNotifyingPolice(src, Config.SellLocations[sellLocationIndex].policeAlertChance)
@@ -67,10 +86,20 @@ QBCore.Functions.CreateCallback('g-drugselling:server:getSellableItems', functio
             local sellableQuantity = bundlesToSell * v.sell_quantity
             local price = v.money_amount * bundlesToSell
             local item = {}
+            local rewardItems = {}
             item.name = k
             item.sellableQuantity = sellableQuantity
             item.price = price
-            table.insert(items, item)
+            for k2, v2 in pairs(v.item_rewards) do
+                local rewardItem = {}
+                rewardItem.name = k2
+                rewardItem.amount = v2 * bundlesToSell
+                table.insert(rewardItems, rewardItem)
+            end
+            item.rewardItems = rewardItems
+            if item.price > 0 or (item.price == 0 and (item.rewardItems and #item.rewardItems > 0)) then
+                table.insert(items, item)
+            end
         end
     end
     cb(items)
