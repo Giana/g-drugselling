@@ -5,7 +5,7 @@ for k, v in pairs(Config.SellLocations) do
             heading = 0,
             debugPoly = false,
             minZ = Config.SellLocations[k].coords.z - 1,
-            maxZ = Config.SellLocations[k].coords + 1,
+            maxZ = Config.SellLocations[k].coords.z + 1,
         }, {
             options = {
                 {
