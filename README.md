@@ -17,7 +17,9 @@ G-DrugSelling is a script for FiveM QBCore for selling drugs (or any items) from
 
 **IMAGES**
 -----
-Coming Soon
+![Drug Selling NPC](https://i.ibb.co/rZHcgPr/drugsellingnpc.png)
+![Drug Selling NPC Target](https://i.ibb.co/cQ3NPPS/drugsellingnpctarget.png)
+![Drug Selling NPC Sell Rewards](https://i.ibb.co/5LB815k/drugsellingnpcsellrewards.png)
 
 **DEPENDENCIES**
 -----
@@ -29,4 +31,4 @@ Coming Soon
 **CREDIT**
 -----
 Code excerpts for NPC spawning and the concept of NPC render distance were repurposed and refactored from [pickle_farming](https://github.com/PickleModifications/pickle_farming).
-Code excerpts for getting and caching current police count were repurposed from [qb-jewelery](https://github.com/qbcore-framework/qb-jewelery).
+Code excerpts for caching current police count were repurposed from [qb-jewelery](https://github.com/qbcore-framework/qb-jewelery).

@@ -107,12 +107,7 @@ end)
 
 QBCore.Functions.CreateCallback('g-drugselling:server:getCopCount', function(source, cb)
     local src = source
-    local policeCount = 0
-    for _, v in pairs(QBCore.Functions.GetQBPlayers()) do
-        if v.PlayerData.job.name == "police" and v.PlayerData.job.onduty then
-            policeCount = policeCount + 1
-        end
-    end
-    CachedPolice[src] = policeCount
-    cb(policeCount)
+    local amount = QBCore.Functions.GetDutyCount('police')
+    CachedPolice[src] = amount
+    cb(amount)
 end)
