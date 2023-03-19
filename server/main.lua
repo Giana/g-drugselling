@@ -107,8 +107,7 @@ end)
 
 QBCore.Functions.CreateCallback('g-drugselling:server:getCopCount', function(source, cb)
     local src = source
-    local policeCount = 0
-    local amount = QBCore.Functions.GetDutyCount("police")
+    local amount = QBCore.Functions.GetDutyCount('police')
     CachedPolice[src] = amount
     cb(amount)
 end)
